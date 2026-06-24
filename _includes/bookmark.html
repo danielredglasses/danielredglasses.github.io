@@ -1,0 +1,17 @@
+<a href="{{ include.url }}" target="_blank" rel="noopener noreferrer" class="bookmark-card">
+  <div class="bookmark-info">
+    <div class="bookmark-title">{{ include.title }}</div>
+    {% if include.description %}
+    <div class="bookmark-description">{{ include.description }}</div>
+    {% endif %}
+    <div class="bookmark-url">
+      {% if include.favicon %}<img src="{{ include.favicon }}" class="bookmark-favicon" alt="">{% endif %}
+      {{ include.url | remove: "https://" | remove: "http://" | split: "/" | first }}
+    </div>
+  </div>
+  {% if include.image %}
+  <div class="bookmark-thumbnail">
+    <img src="{{ include.image }}" alt="{{ include.title }}">
+  </div>
+  {% endif %}
+</a>

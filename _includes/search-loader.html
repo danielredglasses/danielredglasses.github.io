@@ -1,0 +1,84 @@
+<!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+{% capture result_elem %}
+  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">
+    <header>
+      <h2><a href="{url}">{title}</a></h2>
+      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">
+        {categories}
+        {tags}
+      </div>
+    </header>
+    <p>{content}</p>
+  </article>
+{% endcapture %}
+
+{% capture not_found %}<p class="mt-5">{{ site.data.locales[include.lang].search.no_results }}</p>{% endcapture %}
+
+{% assign search_index = '/assets/js/data/search.json' %}
+{% if include.lang == 'ko-KR' %}
+  {% assign search_index = '/assets/js/data/search-ko.json' %}
+{% endif %}
+
+<script>
+  {% comment %} Note: dependent library will be loaded in `js-selector.html` {% endcomment %}
+  document.addEventListener('DOMContentLoaded', () => {
+    SimpleJekyllSearch({
+      searchInput: document.getElementById('search-input'),
+      resultsContainer: document.getElementById('search-results'),
+      json: '{{ search_index | relative_url }}',
+      searchResultTemplate: '{{ result_elem | strip_newlines }}',
+      noResultsText: '{{ not_found }}',
+      templateMiddleware: function(prop, value, template) {
+        if (prop === 'categories') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+          }
+        }
+
+        if (prop === 'tags') {
+          if (value === '') {
+            return `${value}`;
+          } else {
+            return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+          }
+        }
+      },
+      success: function () {
+        // Carries a search query across a language switch (see
+        // lang-toggle.html) — reopen the search box and re-run it here,
+        // now against this page's own language's index.
+        var query = new URLSearchParams(location.search).get('q');
+        if (!query) return;
+
+        var trigger = document.getElementById('search-trigger');
+        var input = document.getElementById('search-input');
+        if (trigger) trigger.click();
+        if (!input) return;
+
+        input.value = query;
+
+        // SimpleJekyllSearch's "success" fires as soon as the JSON fetch
+        // is *kicked off*, not once it's loaded — the input listener that
+        // actually runs the search isn't attached yet at this point. Retry
+        // dispatching for up to ~1.5s; once the listener is attached the
+        // dispatch goes through, and re-dispatching after that is harmless.
+        var attempts = 0;
+        (function tryDispatch() {
+          input.dispatchEvent(new Event('input', { bubbles: true }));
+          attempts += 1;
+          if (attempts < 15) setTimeout(tryDispatch, 100);
+        })();
+
+        var url = new URL(location.href);
+        url.searchParams.delete('q');
+        history.replaceState({}, '', url);
+      }
+    });
+  });
+</script>

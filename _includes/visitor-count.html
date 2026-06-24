@@ -1,0 +1,50 @@
+{% if site.analytics.goatcounter.id and site.goatcounter_api_token %}
+  {% if include.lang == "ko-KR" %}
+    {% assign visitors_label = "방문자" %}
+    {% assign today_label = "오늘" %}
+    {% assign week_label = "이번 주" %}
+  {% else %}
+    {% assign visitors_label = "Visitors" %}
+    {% assign today_label = "Today" %}
+    {% assign week_label = "This week" %}
+  {% endif %}
+
+  <section id="access-visitor-count">
+    <h2 class="panel-heading">{{ visitors_label }}</h2>
+    <div class="content ps-0 pb-1 ms-1 mt-2">
+      <div class="d-flex justify-content-between">
+        <span>{{ today_label }}</span>
+        <span id="visitor-count-today">&ndash;</span>
+      </div>
+      <div class="d-flex justify-content-between">
+        <span>{{ week_label }}</span>
+        <span id="visitor-count-week">&ndash;</span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const base = 'https://{{ site.analytics.goatcounter.id }}.goatcounter.com/api/v0/stats/total';
+      const headers = { Authorization: 'Bearer {{ site.goatcounter_api_token }}' };
+      const fmt = new Intl.NumberFormat();
+
+      const todayEl = document.getElementById('visitor-count-today');
+      const weekEl = document.getElementById('visitor-count-week');
+
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+
+      fetch(`${base}?start=${encodeURIComponent(startOfToday.toISOString())}`, { headers })
+        .then((res) => res.json())
+        .then((data) => { todayEl.textContent = fmt.format(data.total); })
+        .catch(() => { todayEl.textContent = '—'; });
+
+      // No start/end params: GoatCounter defaults to "one week ago" through "now".
+      fetch(base, { headers })
+        .then((res) => res.json())
+        .then((data) => { weekEl.textContent = fmt.format(data.total); })
+        .catch(() => { weekEl.textContent = '—'; });
+    });
+  </script>
+{% endif %}

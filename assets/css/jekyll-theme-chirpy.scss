@@ -7,6 +7,8 @@
   .bundle
 {%- endif -%}
 ';
+@use 'abstracts/breakpoints' as bp;
+@use 'abstracts/variables' as v;
 
 /* append your custom style below */
 
@@ -28,4 +30,309 @@ kbd {
   max-width: 720px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* The rule above is meant for the post/page body prose wrapper
+   (_layouts/post.html, _layouts/page.html), but post-list.html's summary
+   text on home page cards happens to share the same "content" class —
+   so on a wide card it was getting capped at 720px and centered, making
+   it indented relative to the title sitting right above it. */
+#post-list .card-text.content {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Bookmark card */
+a.bookmark-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1.25rem 0;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: var(--link-color, #6366f1);
+  }
+
+  .bookmark-info {
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .bookmark-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bookmark-description {
+    font-size: 0.8rem;
+    opacity: 0.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .bookmark-url {
+    font-size: 0.75rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: auto;
+    padding-top: 0.25rem;
+  }
+
+  .bookmark-favicon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+  }
+
+  .bookmark-thumbnail {
+    flex-shrink: 0;
+    width: 130px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+}
+
+/* Language toggle */
+.lang-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 999px;
+  overflow: hidden;
+  font-size: 0.75rem;
+
+  .lang-toggle-btn {
+    padding: 0.2rem 0.7rem;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.5;
+
+    &.active {
+      opacity: 1;
+      font-weight: 600;
+      background: var(--link-color, #6366f1);
+      color: #fff;
+    }
+
+    &:hover:not(.active) {
+      opacity: 0.8;
+    }
+  }
+}
+
+/* About page profile photo (moved here from the sidebar). Crops instead
+   of stretching non-square photos, nudged below dead-center (50%) to
+   shift the visible face down a bit. */
+.about-avatar {
+  display: block;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 42%;
+  box-shadow: var(--avatar-border-color) 0 0 0 2px;
+}
+
+/* Topbar actions (language + theme-mode toggle) */
+#topbar-actions {
+  gap: 0.5rem;
+
+  .lang-toggle {
+    margin-right: 0.25rem;
+  }
+
+  #mode-toggle {
+    line-height: 1;
+  }
+
+  @include bp.lg {
+    margin-left: auto;
+    margin-right: 0.75rem;
+  }
+}
+
+/* The theme only truncates #breadcrumb between lg and xl (see
+   _sass/layout/_topbar.scss) — above xl it's unconstrained and grows with
+   its content (page title length, "Home" vs "홈"). That was fine with the
+   theme's original two-item topbar, but now that #topbar-actions also
+   competes for the same row, a longer breadcrumb at xl+ pushes the
+   toggle/search group sideways. Truncate at every width breadcrumb is
+   visible, so it never reflows the rest of the bar. */
+#breadcrumb {
+  @include bp.lg {
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+/* Keep the topbar (location, language/theme toggles, search) pinned to
+   the top of the viewport while the page scrolls, instead of scrolling
+   away with the content. Its background (--topbar-bg) is translucent by
+   design (64-70% alpha, see _sass/themes), but without a backdrop-filter
+   that just dims scrolled-under content instead of blurring it.
+
+   Taller than the theme's default 3rem so its content (already centered
+   via #topbar's own h-100 + align-items-center) sits a bit lower within
+   the bar, rather than offsetting the bar's sticky position itself.
+   Note: #toc-bar (the mobile/tablet TOC trigger bar on post pages) and a
+   couple of popup calculations still assume the original 3rem via the
+   $topbar-height Sass variable — they're a separate, narrower-scoped UI
+   element and aren't adjusted here. */
+#topbar-wrapper {
+  position: sticky;
+  top: 0;
+  height: 4rem;
+  z-index: 1;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  // Extends the same blur a little past the topbar's own bottom edge,
+  // fading it out gradually instead of an abrupt cutoff right at the
+  // border as content scrolls underneath.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 100rem;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    -webkit-mask-image: linear-gradient(black, transparent);
+    mask-image: linear-gradient(black, transparent);
+  }
+}
+
+/* Desktop sidebar collapse toggle — a small round handle centered
+   vertically on the seam between the sidebar and the main content, which
+   slides the sidebar fully off-screen and reclaims its space. Separate
+   from the existing mobile hamburger drawer (#sidebar-trigger), which
+   keeps working as-is below the lg breakpoint.
+
+   Neither #sidebar nor #main-wrapper has a transition for this at desktop
+   widths by default (the theme only animates the mobile drawer), so the
+   collapse would otherwise snap instantly instead of sliding. */
+#sidebar {
+  @include bp.lg {
+    transition: transform 0.3s ease;
+  }
+}
+
+#main-wrapper {
+  @include bp.lg {
+    transition: margin-left 0.3s ease;
+  }
+}
+
+#sidebar-collapse-toggle {
+  display: none;
+
+  @include bp.lg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    // Centered ON the sidebar/content seam — computed directly so the
+    // collapsed state below can move it to a plain, fully-on-screen
+    // `left` without fighting a translateX(-50%) that would otherwise
+    // hang half the button off the edge of the viewport.
+    left: calc(#{v.$sidebar-width} - 1.125rem);
+    z-index: 3;
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--sidebar-border-color);
+    border-radius: 50%;
+    background: var(--sidebar-bg);
+    color: inherit;
+    font-size: 1.1rem;
+    transform: translateY(-50%);
+    transition: left 0.3s ease;
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: var(--sidebar-hover-bg);
+    }
+  }
+
+  @include bp.xxxl {
+    left: calc(#{v.$sidebar-width-large} - 1.125rem);
+  }
+}
+
+[sidebar-collapsed] {
+  #sidebar {
+    @include bp.lg {
+      transform: translateX(-100%);
+    }
+  }
+
+  #main-wrapper {
+    @include bp.lg {
+      margin-left: 0;
+    }
+  }
+
+  #sidebar-collapse-toggle {
+    @include bp.lg {
+      // A plain on-screen inset now that it's not also fighting a
+      // translateX(-50%) — previously `left: 0` put the button's center
+      // at the viewport edge, hiding half of it off-screen.
+      left: 0.75rem;
+    }
+
+    i {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+/* Home page post-list cards: the date and category sit inline in the same
+   row (icon, date, icon, category). English dates ("Jun 17, 2026") and
+   Korean dates ("2026/06/17", see _data/locales) render to different
+   widths, which shifted where the category starts when switching
+   language. Give the date a fixed width so the category always starts at
+   the same offset regardless of which language's date is showing. */
+#post-list .card .card-body .post-meta time {
+  display: inline-block;
+  min-width: 6.5rem;
+}
+
+/* Pulls the category a bit closer to the date — the theme adds an extra
+   1.5rem (1.75rem at md+) margin-left on top of normal spacing for any
+   icon that isn't the first one in .post-meta (i.e. the folder icon). */
+#post-list .card .card-body .post-meta i:not(:first-child) {
+  margin-left: 0.75rem;
 }

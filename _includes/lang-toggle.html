@@ -1,0 +1,52 @@
+{% assign active_lang = nil %}
+
+{% if page.ref %}
+  {% assign cur_lang = page.lang | default: site.lang %}
+  {% assign translation = nil %}
+  {% assign candidates = site.posts | concat: site.tabs | concat: site.pages %}
+
+  {% for p in candidates %}
+    {% assign p_lang = p.lang | default: site.lang %}
+    {% if p.ref == page.ref and p.url != page.url and p_lang != cur_lang %}
+      {% assign translation = p %}
+    {% endif %}
+  {% endfor %}
+
+  {% if translation %}
+    {% if cur_lang == "ko-KR" %}
+      {% assign en_url = translation.url %}
+      {% assign ko_url = page.url %}
+      {% assign active_lang = "ko" %}
+    {% else %}
+      {% assign en_url = page.url %}
+      {% assign ko_url = translation.url %}
+      {% assign active_lang = "en" %}
+    {% endif %}
+  {% endif %}
+{% endif %}
+
+{% if active_lang %}
+  <div class="lang-toggle">
+    <a href="{{ en_url | relative_url }}" class="lang-toggle-btn{% if active_lang == 'en' %} active{% endif %}">EN</a>
+    <a href="{{ ko_url | relative_url }}" class="lang-toggle-btn{% if active_lang == 'ko' %} active{% endif %}">KO</a>
+  </div>
+
+  <script>
+    document.querySelectorAll('.lang-toggle-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        localStorage.setItem('lang-pref', btn.textContent.trim() === 'KO' ? 'ko' : 'en');
+
+        // Mid-search? Carry the query over instead of just dropping the
+        // visitor back on the page behind the search overlay — search-loader.html
+        // picks this back up and re-opens the search box on the next page.
+        var searchInput = document.getElementById('search-input');
+        if (searchInput && searchInput.value.trim() !== '') {
+          e.preventDefault();
+          var target = new URL(btn.href, location.href);
+          target.searchParams.set('q', searchInput.value);
+          location.href = target.toString();
+        }
+      });
+    });
+  </script>
+{% endif %}

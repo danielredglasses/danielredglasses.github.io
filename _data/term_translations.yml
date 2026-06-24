@@ -1,0 +1,15 @@
+# Korean display names for category/tag terms (used by the `translate_term`
+# Liquid filter and _plugins/lang_archives.rb). Posts keep using plain
+# English category/tag strings as always — this only affects what's
+# *displayed* on /ko/ pages. The URL slug is always derived from the
+# English term, so add a translation here without touching any post, and
+# it's picked up everywhere that term appears. Anything missing here just
+# falls back to showing the English term untranslated.
+#
+# Currently empty on purpose — category/tag names show in English on
+# every page, including /ko/. Add entries here if you want specific terms
+# translated again later.
+
+categories:
+
+tags:

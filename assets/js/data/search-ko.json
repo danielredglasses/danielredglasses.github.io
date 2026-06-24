@@ -1,0 +1,41 @@
+---
+layout: compress
+swcache: true
+permalink: /assets/js/data/search-ko.json
+---
+
+{% comment %}
+  Korean search index — same posts as search.json, but each one resolved
+  to its Korean translation where one exists (see search.json for why the
+  resolved post is wrapped in a fresh single-item array before use).
+{% endcomment %}
+
+[
+  {% assign visible_posts = site.posts | where_exp: 'item', 'item.hidden != true' %}
+  {% for original in visible_posts %}
+  {% assign resolved = original | resolve_lang: 'ko-KR' %}
+  {% assign single = '' | split: '' | push: resolved %}
+  {% for post in single %}
+  {% assign translated_categories = '' | split: '' %}
+  {% for c in post.categories %}
+    {% assign translated_c = c | translate_term: 'categories', 'ko-KR' %}
+    {% assign translated_categories = translated_categories | push: translated_c %}
+  {% endfor %}
+  {% assign translated_tags = '' | split: '' %}
+  {% for t in post.tags %}
+    {% assign translated_t = t | translate_term: 'tags', 'ko-KR' %}
+    {% assign translated_tags = translated_tags | push: translated_t %}
+  {% endfor %}
+  {
+    "title": {{ post.title | jsonify }},
+    "url": {{ post.url | relative_url | jsonify }},
+    "categories": {{ translated_categories | join: ', ' | jsonify }},
+    "tags": {{ translated_tags | join: ', ' | jsonify }},
+    "date": {{ post.date | jsonify }},
+    {% capture content -%}{% include post-summary.html full_text=true %}{%- endcapture -%}
+    "content": {{ content | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+  {% unless forloop.last %},{% endunless %}
+  {% endfor %}
+]

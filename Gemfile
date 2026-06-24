@@ -3,6 +3,8 @@
 source "https://rubygems.org"
 
 gem "jekyll-theme-chirpy", "~> 7.5"
+gem "jekyll-admin", group: :jekyll_plugins
+gem "sinatra-cross_origin", group: :jekyll_plugins
 
 gem "html-proofer", "~> 5.0", group: :test
 

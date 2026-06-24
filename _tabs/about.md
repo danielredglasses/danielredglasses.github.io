@@ -2,22 +2,33 @@
 title: About
 icon: fas fa-user
 order: 1
+lang: en
+ref: about
+permalink: /en/about/
 ---
 
-Hi, I'm **Daniel Park** 👋
+<img src="{{ site.avatar | relative_url }}" alt="Daniel Park" class="about-avatar" onerror="this.style.display='none'">
 
-I'm interested in **Reinforcement Learning** and **Competitive Programming**.
+Hi, I'm **Daniel (KyungWook) Park** 👋 
 
-This blog is where I document what I study — concepts, paper reviews, and problem-solving notes.
+I'm an undergraduate student in Yonsei University majoring in Artificial Intelligence. 
 
-## Currently Learning
-- Reinforcement Learning (MDP, Q-Learning, Policy Gradient, PPO)
-- Algorithms & Data Structures (Dynamic Programming, Graph, Trees)
+I am interested in **Reinforcement Learning** and **Competitive Programming**. 
 
-## Skills
-- Languages: Python, C++
-- Tools: Git, GitHub
+I am currently working as an intern at [RLLAB](https://youngwoon.github.io/){:target="_blank" rel="noopener noreferrer"} advised by Prof. Youngwoon Lee. 
+
+This blog is where I document what I study.
+
+## What I Write About
+- **Reinforcement Learning**: notes on ideas and methods proposed in papers I read — not necessarily introductory concepts, but whatever each specific paper proposes.
+- **Competitive Programming**: algorithms I pick up for the first time, plus write-ups of my ICPC experience.
 
 ## Contact
-- GitHub: [github.com/danielredglasses](https://github.com/danielredglasses)
+- GitHub: [github.com/danielredglasses](https://github.com/danielredglasses){:target="_blank" rel="noopener noreferrer"}
 - Email: sk091204@gmail.com
+
+## CV
+
+[Open in new window ↗](/assets/cv.pdf){:target="_blank" rel="noopener noreferrer"}
+
+<embed src="/assets/cv.pdf" type="application/pdf" width="100%" height="800px">

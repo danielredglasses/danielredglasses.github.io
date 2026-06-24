@@ -1,8 +1,9 @@
 ---
+title: Archives
 layout: archives
 icon: fas fa-archive
 order: 4
-lang: en
+lang: ko-KR
 ref: archives
-permalink: /en/archives/
+permalink: /ko/archives/
 ---

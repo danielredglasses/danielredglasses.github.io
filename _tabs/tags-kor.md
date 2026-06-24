@@ -1,8 +1,9 @@
 ---
+title: Tags
 layout: tags
 icon: fas fa-tags
 order: 3
-lang: en
+lang: ko-KR
 ref: tags
-permalink: /en/tags/
+permalink: /ko/tags/
 ---

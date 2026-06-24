@@ -1,4 +1,34 @@
 ---
-layout: home
-# Index page
+permalink: /
 ---
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting&hellip;</title>
+  <meta name="robots" content="noindex">
+  <noscript><meta http-equiv="refresh" content="0; url={{ '/en/' | relative_url }}"></noscript>
+</head>
+<body>
+  <p>Redirecting&hellip; <a id="fallback-link" href="{{ '/en/' | relative_url }}">Click here if you are not redirected.</a></p>
+  <script>
+    (function () {
+      var enUrl = {{ '/en/' | relative_url | jsonify }};
+      var koUrl = {{ '/ko/' | relative_url | jsonify }};
+      var pref = localStorage.getItem('lang-pref');
+      var target;
+
+      if (pref === 'ko') {
+        target = koUrl;
+      } else if (pref === 'en') {
+        target = enUrl;
+      } else {
+        var browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        target = browserLang.indexOf('ko') === 0 ? koUrl : enUrl;
+      }
+
+      location.replace(target);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+---
+layout: page
+# All the Tags of posts.
+---
+
+{% assign lang_prefix = "/en/" %}
+{% if page.lang == "ko-KR" %}
+  {% assign lang_prefix = "/ko/" %}
+{% endif %}
+
+<div id="tags" class="d-flex flex-wrap mx-xl-2">
+  {% assign tags = '' | split: '' %}
+  {% for t in site.tags %}
+    {% assign tags = tags | push: t[0] %}
+  {% endfor %}
+
+  {% assign sorted_tags = tags | sort_natural %}
+
+  {% for t in sorted_tags %}
+    {% capture tag_url %}{{ lang_prefix }}tags/{{ t | slugify | url_encode }}/{% endcapture %}
+    <div>
+      <a class="tag" href="{{ tag_url | relative_url }}">
+        {{ t | translate_term: 'tags', page.lang -}}
+        <span class="text-muted">{{ site.tags[t].size }}</span>
+      </a>
+    </div>
+  {% endfor %}
+</div>

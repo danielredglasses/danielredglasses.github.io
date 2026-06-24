@@ -61,7 +61,7 @@ analytics:
   google:
     id: # fill in your Google Analytics ID
   goatcounter:
-    id: # fill in your GoatCounter ID
+    id: danielredglasses # fill in your GoatCounter ID
   umami:
     id: # fill in your Umami ID
     domain: # fill in your Umami domain
@@ -75,7 +75,14 @@ analytics:
 
 # Page views settings
 pageviews:
-  provider: # now only supports 'goatcounter'
+  provider: goatcounter
+
+# Read-only GoatCounter API token for the visitor-count widget
+# (_includes/visitor-count.html). Create it in GoatCounter under
+# Settings -> API, scoped to "Stats" permission ONLY (no Export/Sites/Admin) -
+# this token ends up in the published page source, so it must not be able to
+# do anything beyond reading stats.
+goatcounter_api_token: 1l9ce3wup33lb2j7x1kl5dmbl9h4qocgk87c31okqf7ginxwzl # fill in your GoatCounter API token (Stats-only scope)
 
 # Prefer color scheme setting.
 #
@@ -88,7 +95,7 @@ pageviews:
 #     light — Use the light color scheme
 #     dark — Use the dark color scheme
 #
-theme_mode: light # [light | dark]
+# theme_mode: light # [light | dark]
 
 # The CDN endpoint for media resources.
 # Notice that once it is assigned, the CDN url
@@ -98,7 +105,7 @@ theme_mode: light # [light | dark]
 cdn:
 
 # the avatar on sidebar, support local or CORS resources
-avatar: /assets/img/profile.jpg
+avatar: /assets/img/profile.png
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
@@ -145,7 +152,8 @@ pwa:
     # Usually its value is the `baseurl` of another website that
     # shares the same domain name as the current website.
     deny_paths:
-      # - "/example"  # URLs match `<SITE_URL>/example/*` will not be cached by the PWA
+      - "/_api"   # jekyll-admin API — must not be cached by the service worker
+      - "/admin"  # jekyll-admin UI
 
 paginate: 10
 
@@ -179,8 +187,9 @@ defaults:
       layout: post
       comments: true # Enable comments in posts.
       toc: true # Display TOC column in posts.
-      # DO NOT modify the following parameter unless you are confident enough
-      # to update the code of all other post links in this project.
+      # Fallback only — every post gets a real `permalink:` injected into its
+      # own front matter by _plugins/auto_front_matter.rb (lang-prefixed,
+      # e.g. /en/posts/<ref>/), which takes priority over this default.
       permalink: /posts/:title/
   - scope:
       path: _drafts
@@ -216,11 +225,8 @@ exclude:
   - "*.config.js"
   - "package*.json"
 
+# Category/tag archive pages are generated bilingually (one page per
+# language under /en/ and /ko/) by _plugins/lang_archives.rb instead, since
+# jekyll-archives only supports a single global permalink per archive type.
 jekyll-archives:
-  enabled: [categories, tags]
-  layouts:
-    category: category
-    tag: tag
-  permalinks:
-    tag: /tags/:name/
-    category: /categories/:name/
+  enabled: []
