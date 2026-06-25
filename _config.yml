@@ -154,6 +154,12 @@ pwa:
     deny_paths:
       - "/_api"   # jekyll-admin API — must not be cached by the service worker
       - "/admin"  # jekyll-admin UI
+      # Search index files — cache-first runtime caching would otherwise
+      # serve whatever version of these a returning visitor's browser
+      # first happened to fetch, forever, across deploys with new/updated
+      # posts (see _includes/search-loader.html / assets/js/data/search*.json).
+      - "/assets/js/data/search.json"
+      - "/assets/js/data/search-ko.json"
 
 paginate: 10
 
