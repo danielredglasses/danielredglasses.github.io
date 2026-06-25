@@ -181,11 +181,11 @@ Custom styles are in `assets/css/jekyll-theme-chirpy.scss`. The section below th
 
 ### Adding or changing the photo
 
-The profile photo lives on the About page (`_tabs/about.md` / `_tabs/about-kor.md`, rendered via the `.about-avatar` class — 160×160px circle), not the sidebar; the sidebar no longer shows it.
+The profile photo lives in the left sidebar, just below the site title (`_includes/sidebar.html`, rendered via the `.sidebar-avatar` class — a small circle, ~6.5–7rem depending on screen width).
 
 1. Save your photo at the path set by `avatar:` in `_config.yml` (currently `assets/img/profile.png`), overwriting it if you're replacing an existing one. A square image works best — `object-fit: cover` crops non-square photos to a circle, currently nudged slightly below dead-center via `object-position` in `assets/css/jekyll-theme-chirpy.scss` to keep faces framed properly.
-2. Using a different filename or format? Update the `avatar:` line in `_config.yml` to match — both About page templates reference it via `{{ site.avatar | relative_url }}`, so one config change updates them both.
-3. Restart the local server and check `/en/about/` (and `/ko/about/`).
+2. Using a different filename or format? Update the `avatar:` line in `_config.yml` to match — the sidebar references it via `{{ site.avatar | relative_url }}`.
+3. Restart the local server and check any page — the sidebar is shared across the whole site.
 
 ### Visitor counter (GoatCounter)
 

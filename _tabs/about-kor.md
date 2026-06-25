@@ -7,8 +7,6 @@ ref: about
 permalink: /ko/about/
 ---
 
-<img src="{{ site.avatar | relative_url }}" alt="Daniel Park" class="about-avatar" onerror="this.style.display='none'">
-
 안녕하세요, 저는 연세대학교에서 인공지능을 전공하고 있는 **박경욱 (Daniel Park)** 입니다 👋 
 
 저는 **강화학습(Reinforcement Learning)**과 **알고리즘 문제해결(Competitive Programming)**에 관심이 있습니다.

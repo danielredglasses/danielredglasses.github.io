@@ -7,8 +7,6 @@ ref: about
 permalink: /en/about/
 ---
 
-<img src="{{ site.avatar | relative_url }}" alt="Daniel Park" class="about-avatar" onerror="this.style.display='none'">
-
 Hi, I'm **Daniel (KyungWook) Park** 👋 
 
 I'm an undergraduate student in Yonsei University majoring in Artificial Intelligence. 
