@@ -50,9 +50,9 @@
         }
       },
       success: function () {
-        // Carries a search query across a language switch (see
-        // lang-toggle.html) — reopen the search box and re-run it here,
-        // now against this page's own language's index.
+        /* Carries a search query across a language switch (see
+           lang-toggle.html) — reopen the search box and re-run it here,
+           now against this page's own language's index. */
         var query = new URLSearchParams(location.search).get('q');
         if (!query) return;
 
@@ -63,11 +63,11 @@
 
         input.value = query;
 
-        // SimpleJekyllSearch's "success" fires as soon as the JSON fetch
-        // is *kicked off*, not once it's loaded — the input listener that
-        // actually runs the search isn't attached yet at this point. Retry
-        // dispatching for up to ~1.5s; once the listener is attached the
-        // dispatch goes through, and re-dispatching after that is harmless.
+        /* SimpleJekyllSearch's "success" fires as soon as the JSON fetch
+           is *kicked off*, not once it's loaded — the input listener that
+           actually runs the search isn't attached yet at this point. Retry
+           dispatching for up to ~1.5s; once the listener is attached the
+           dispatch goes through, and re-dispatching after that is harmless. */
         var attempts = 0;
         (function tryDispatch() {
           input.dispatchEvent(new Event('input', { bubbles: true }));

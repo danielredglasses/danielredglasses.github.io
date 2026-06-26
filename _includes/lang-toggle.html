@@ -36,9 +36,9 @@
       btn.addEventListener('click', function (e) {
         localStorage.setItem('lang-pref', btn.textContent.trim() === 'KO' ? 'ko' : 'en');
 
-        // Mid-search? Carry the query over instead of just dropping the
-        // visitor back on the page behind the search overlay — search-loader.html
-        // picks this back up and re-opens the search box on the next page.
+        /* Mid-search? Carry the query over instead of just dropping the
+           visitor back on the page behind the search overlay — search-loader.html
+           picks this back up and re-opens the search box on the next page. */
         var searchInput = document.getElementById('search-input');
         if (searchInput && searchInput.value.trim() !== '') {
           e.preventDefault();

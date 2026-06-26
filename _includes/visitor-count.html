@@ -40,7 +40,7 @@
         .then((data) => { todayEl.textContent = fmt.format(data.total); })
         .catch(() => { todayEl.textContent = '—'; });
 
-      // No start/end params: GoatCounter defaults to "one week ago" through "now".
+      /* No start/end params: GoatCounter defaults to "one week ago" through "now". */
       fetch(base, { headers })
         .then((res) => res.json())
         .then((data) => { weekEl.textContent = fmt.format(data.total); })

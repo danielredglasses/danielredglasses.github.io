@@ -18,9 +18,9 @@ layout: compress
 
   <body>
     <script>
-      // Applied before the sidebar/main-wrapper render so there's no
-      // flash of the wrong (expanded) state on load, matching how
-      // theme.min.js avoids a dark/light flash for the color scheme.
+      /* Applied before the sidebar/main-wrapper render so there's no
+         flash of the wrong (expanded) state on load, matching how
+         theme.min.js avoids a dark/light flash for the color scheme. */
       if (localStorage.getItem('sidebar-collapsed') === 'true') {
         document.documentElement.setAttribute('sidebar-collapsed', '');
       }
