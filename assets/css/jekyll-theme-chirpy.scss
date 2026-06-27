@@ -150,6 +150,13 @@ a.bookmark-card {
   margin-right: auto;
 }
 
+/* Balance sidebar profile padding so the avatar and title are centered:
+   theme default is 2.5rem left / 1.25rem right (40px / 20px). */
+#sidebar .profile-wrapper {
+  padding-left: 1.875rem;
+  padding-right: 1.875rem;
+}
+
 /* Sidebar profile photo, placed below the site title. Centered to align
    with the (also centered) title above it. Crops instead of stretching
    non-square photos, nudged below dead-center (50%) to shift the visible
