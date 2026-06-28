@@ -8,7 +8,13 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   <header class="profile-wrapper">
-    <a class="site-title d-block" href="{{ home_url | relative_url }}">{{ site.title }}</a>
+    <a class="site-title d-block" href="{{ home_url | relative_url }}">
+      {% if current_lang == "ko-KR" %}
+        박경욱<br><span class="site-subtitle-name">(Daniel Park)</span>
+      {% else %}
+        Daniel Park<br><span class="site-subtitle-name">(박경욱)</span>
+      {% endif %}
+    </a>
     <a href="{{ home_url | relative_url }}" class="d-block">
       <img src="{{ site.avatar | relative_url }}" alt="{{ site.title }}" class="sidebar-avatar" onerror="this.style.display='none'">
     </a>

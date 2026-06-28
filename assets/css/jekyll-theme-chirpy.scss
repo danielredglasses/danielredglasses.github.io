@@ -148,6 +148,12 @@ a.bookmark-card {
 .profile-wrapper .site-title {
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
+}
+
+.site-subtitle-name {
+  display: block;
+  text-align: center;
 }
 
 /* Balance sidebar profile padding so the avatar and title are centered:
