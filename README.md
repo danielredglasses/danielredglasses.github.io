@@ -92,6 +92,49 @@ Only posts with `status: completed` are shown when the site is deployed (built w
 
 A build-time check rejects any other value for `status` (e.g. a typo like `compelted`) with an error telling you which post and which value is invalid.
 
+### Inserting and sizing images
+
+Place image files in `assets/img/posts/<your-post-slug>/` and embed them with a Liquid path so relative URLs work on both local and deployed builds:
+
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }})
+```
+
+This renders the image at its natural size (up to the content column width). To control the size, append a Kramdown inline-attribute block `{: ...}` immediately after the closing `)` — no space:
+
+**Fixed pixel width** (height scales automatically to preserve aspect ratio):
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}){: width="400"}
+```
+
+**Percentage of the content column width:**
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}){: style="width: 60%"}
+```
+
+**Both width and height** (can distort the image if the ratio doesn't match):
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}){: width="400" height="300"}
+```
+
+**Centering** — add `style="display:block; margin:auto;"` to the same attribute block. You can combine it with a width in one go:
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}){: width="400" style="display:block; margin:auto;"}
+```
+
+If you just want to center without fixing the width (image fills the column but is centered):
+```markdown
+![]({{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}){: style="display:block; margin:auto;"}
+```
+
+If you need more control (e.g. a caption, or complex layout), use a raw `<img>` tag instead — Kramdown passes HTML through unchanged:
+
+```html
+<img src="{{ 'assets/img/posts/DUSDi/my-figure.png' | relative_url }}" width="400" alt="Figure 1" style="display:block; margin:auto;">
+```
+
+> Liquid processes the `{{ ... | relative_url }}` part first, then Kramdown parses the resulting Markdown (including the `{: ...}` attributes), so this syntax works exactly as it looks.
+
 ### Things to watch for when writing a post
 
 - **Screenshot filenames from macOS are a trap.** macOS inserts an invisible *narrow no-break space* (U+202F, not a regular space) between the time and AM/PM in screenshot filenames, e.g. `Screenshot 2026-06-17 at 5.32.06 PM.png`. It's indistinguishable from a normal space when you look at it, but if you ever retype that filename in a Markdown image link — instead of letting it autocomplete or copy-pasting it — your keyboard produces a *regular* space, and the link silently stops matching the real file (no build error, the image just doesn't show). This bit `_posts/2026-06-17-DUSDi-kor.md` twice in this project. Safest fix: rename screenshot files yourself before adding them — replace the space before AM/PM with a regular one (or strip spaces entirely) — so there's no invisible character left to mismatch.
@@ -134,7 +177,7 @@ The two posts are independent files — content isn't synced automatically, so e
 
 When asking for a Korean translation of an existing post, a prompt along these lines has produced results consistent with the rest of the site:
 
-> Translate `_posts/<date>-<slug>.md` into Korean and save it as `_posts/<date>-<slug>-kor.md`, with `lang: ko-KR` and the same `ref: <slug>` as the English post. Use formal, polite Korean (하십시오체 — statements ending in `-습니다`/`-입니다`, questions in `-일까요?`), not casual speech. Don't convert every `-다` you see: leave conditional forms (`-다면`, "if...") and embedded quotative forms (`-다는`, "...that...") alone — only the ones that actually end a sentence change. Keep all Markdown formatting, LaTeX math (`$...$`, `$$...$$`), image embeds, and links exactly as in the English version — translate prose only, nothing else. Keep `categories:`/`tags:` in English (see "Translating category/tag names" below if you also want their displayed Korean names). The front matter `title:` can be a localized title.
+> Translate `_posts/<date>-<slug>.md` into Korean and save it as `_posts/<date>-<slug>-kor.md`, with `lang: ko-KR` and the same `ref: <slug>` as the English post. Use formal, polite Korean (하십시오체 — statements ending in `-습니다`/`-입니다`, questions in `-일까요?`), not casual speech. Don't convert every `-다` you see: leave conditional forms (`-다면`, "if...") and embedded quotative forms (`-다는`, "...that...") alone — only the ones that actually end a sentence change. Keep all Markdown formatting, LaTeX math (`$...$`, `$$...$$`), image embeds, and links exactly as in the English version — translate prose only, nothing else. Keep `categories:`/`tags:` in English (see "Translating category/tag names" below if you also want their displayed Korean names). Keep the front matter `title:` in English exactly as it appears — do not translate it. Keep all headings (`##`, `###`, etc.) in English exactly as they appear — do not translate them. Keep technical jargon in English as-is within the Korean prose (e.g. oracle policy, student policy, policy distillation, command space, reward, penalty, regularization, proprioception state, goal state, DAgger, PPO, masking, dataset, baseline, tracking error, embodiment).
 
 `_posts/2026-06-17-DUSDi-kor.md` is a worked example of this — both the initial translation and a later pass to make every sentence ending consistently formal.
 
